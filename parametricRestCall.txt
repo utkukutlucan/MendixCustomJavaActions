@@ -1,0 +1,96 @@
+		// BEGIN USER CODE
+
+
+		 try {
+			  
+				
+		        // URL Rest Start
+		        /*
+				URL url = new URL(this.Url);
+				HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+				conn.setDoOutput(true);
+				conn.setRequestMethod(this.Method);
+				OutputStream os = conn.getOutputStream();
+				OutputStreamWriter osw = new OutputStreamWriter(os, "UTF-8");    
+				osw.write(this.Body);
+				osw.flush();
+				osw.close();
+				os.close();  //don't forget to close the OutputStream
+				conn.connect();
+			*/
+			 //'bearer ' + $Variable/Access_token
+				
+			 	URL url = new URL(this.Url);
+				HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+				
+				conn.setUseCaches(false);
+				conn.setDoInput(true);
+				conn.setDoOutput(true);
+
+				//String userCredentials = "username:password";
+				if(this.Token != null)
+				{
+					String basicAuth = "bearer " + this.Token;
+					conn.setRequestProperty ("Authorization", basicAuth);
+				}
+				
+				conn.setRequestMethod(this.Method);
+				//conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+				//conn.setRequestProperty("Content-Length", "" + postData.getBytes().length);
+				//conn.setRequestProperty("Content-Language", "en-US");
+				
+				if(this.Body != null)
+				{
+					OutputStream os = conn.getOutputStream();
+					OutputStreamWriter osw = new OutputStreamWriter(os, "UTF-8");    
+					osw.write(this.Body);
+					osw.flush();
+					osw.close();
+					os.close();  //don't forget to close the OutputStream
+					
+				}
+				
+
+				
+				
+				if (conn.getResponseCode() != 200) {
+					 
+					return Integer.toString(conn.getResponseCode());
+				}
+
+
+				BufferedReader br = new BufferedReader(new InputStreamReader(
+					(conn.getInputStream())));
+
+			 
+				String output;
+				String returnString="";
+				
+				//System.out.println("Output from Server .... \n");
+				while ((output = br.readLine()) != null) {
+					//System.out.println(output);
+					returnString += output;
+				}
+
+				conn.disconnect();
+				return returnString;
+
+				 // URL Rest Stop
+				
+				
+				
+			  } catch (MalformedURLException e) {
+
+				e.printStackTrace();
+				return "hata: " + e.getMessage();
+
+			  } catch (IOException e) {
+
+				e.printStackTrace();
+				return "hata: " + e.getMessage();
+
+			  }
+
+		
+		
+		// END USER CODE
